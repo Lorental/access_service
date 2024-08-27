@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Сотрудники - Панель управления
+</div>
+<div>
+    <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:employee_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1">ФИО</th>
+                            <th class="column2">Вид трудоустройства</th>
+                            <th class="column3">Активно</th>
+                            <th class="column4">Является контрагентом</th>
+                            <th class="column5">Юр.лицо</th>
+                            <th class="column6">Дата окончания сотрудничества</th>
+                            <th class="column7">Автор</th>
+                            <th class="column8">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td class="column1">
+                                {{ employee.common_name }}
+                            </td>
+                            <td class="column2">{{ employee.contract_type.type }}</td>
+                            <td class="column3">{{ employee.is_active }}</td>
+                            <td class="column4">{{ employee.is_contragent }}</td>
+                            <td class="column5">{{ employee.company.name }}</td>
+                            <td class="column6">{{ employee.end_time }}</td>
+                            <td class="column7">{{ contragent.created_by }}</td>
+                            <td class="column8">
+                                <div>
+                                    <a href="{% url 'access_engine:employee_update' employee.id %}">Изменить</a>
+                                </div>
+                                <div>
+                                    <a href="{% url 'access_engine:employee_delete' employee.id %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+<!-- templates/includes/header.html -->
+<header>
+    <nav class="navbar shadow-sm">
+      <div class="container">
+      {% if user.is_authenticated %}
+        {% with request.resolver_match.view_name as view_name %}
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'access_engine:employee_list' %} active {% endif %}"
+                href="{% url 'access_engine:employee_list' %}">
+                Сотрудники
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'access_engine:right_list' %} active {% endif %}"
+                href="{% url 'access_engine:right_list' %}">
+                Права доступа
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'access_engine:role_list' %} active {% endif %}" 
+                href="{% url 'access_engine:role_list' %}">
+                Роли
+              </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if view_name == 'access_engine:itasset_list' %} active {% endif %}" 
+                  href="{% url 'access_engine:itasset_list' %}">
+                  ИТ Активы
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if view_name == 'access_engine:techaccount_list' %} active {% endif %}" 
+                  href="{% url 'access_engine:techaccount_list' %}">
+                  Тех. аккаунты
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if view_name == 'access_engine:contragent_list' %} active {% endif %}" 
+                  href="{% url 'access_engine:contragent_list' %}">
+                  Контрагенты
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if view_name == 'access_engine:company_list' %} active {% endif %}" 
+                  href="{% url 'access_engine:company_list' %}">
+                  Юр.Лица
+                </a>
+              </li>
+              <span class="navbar-text">Пользователь: <b>{{ user.username }}</b></span>
+              <!-- Новая кнопка -->
+              <li class="nav-item">
+                <a class="nav-link{% if view_name == 'password_change' %} active {% endif %}"
+                  href="{% url 'access_engine:password_change' %}">Изменить пароль</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'access_engine:logout' %}">Выйти</a>
+              </li>
+          </ul>
+        {% endwith %}
+      {% else %}
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link {% if view_name != 'access_engine:login' %} active {% endif %}"
+            href="{% url 'access_engine:login' %}">
+            Вход в систему
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+      </div>
+    </nav>
+  </header>

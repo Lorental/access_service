@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Юр.лица - Панель управления
+</div>
+<div>
+    <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:company_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1>">Юр.Лицо</th>
+                            <th class="column2>">Автор</th>
+                            <th class="column3>">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr>
+                            <td class="column1">{{ company.name }}</td>
+                            <td class="column2">{{ company.created_by }}</td>
+                            <td class="column3">
+                                <div>
+                                    <a href="{% url 'access_engine:company_update' company.id %}">Изменить</a>
+                                </div>
+                                <div>
+                                    <a href="{% url 'access_engine:company_delete' company.id %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

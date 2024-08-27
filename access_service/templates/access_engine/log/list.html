@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Логи - Панель управления
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1">Лог</th>
+                            <th class="column2">Действие</th>
+                            <th class="column3">Дата/время</th>
+                            <th class="column4">Автор</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td class="column1">{{ log.log }}</td>
+                            <td class="column2">{{ log.action.name }}</td>
+                            <td class="column3">{{ log.create_date }}</td>
+                            <td class="column4">{{ log.created_by }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

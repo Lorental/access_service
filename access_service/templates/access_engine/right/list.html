@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Права сотрудников - Панель управления
+</div>
+<div>
+    <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:right_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1">Роль</th>
+                            <th class="column2">Сотрудник</th>
+                            <th class="column3">ИТ актив</th>
+                            <th class="column4">Тех.учетка</th>
+                            <th class="column5">Автор</th>
+                            <th class="column6">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for right in rights %}
+                        <tr>
+                            <td class="column1">{{ right.role.name }}</td>
+                            <td class="column2">{{ right.employee.common_name }}</td>
+                            <td class="column3">{{ right.role.itasset.name }}</td>
+                            <td class="column4">{{ right.techaccount.name }}</td>
+                            <td class="column5">{{ right.created_by }}</td>
+                            <td class="column6">
+                                <div>
+                                    <a href="{% url 'access_engine:right_update' right.id %}">Изменить</a>
+                                </div>
+                                <div>
+                                    <a href="{% url 'access_engine:right_delete' right.id %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

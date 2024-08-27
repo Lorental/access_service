@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Контрагенты - Панель управления
+</div>
+<div>
+    <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:contragent_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1">Название</th>
+                            <th class="column2">Контактное лицо</th>
+                            <th class="column3">Телефон</th>
+                            <th class="column4">Email</th>
+                            <th class="column5">Ответственный</th>
+                            <th class="column6">Автор</th>
+                            <th class="column7">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contragent in contragents %}
+                        <tr>
+                            <td class="column1">
+                                {{ contragent.name }}
+                            </td>
+                            <td class="column2">{{ contragent.person }}</td>
+                            <td class="column3">{{ contragent.phone_number }}</td>
+                            <td class="column4">{{ contragent.email }}</td>
+                            <td class="column5">{{ contragent.duty_employee.common_name }}</td>
+                            <td class="column6">{{ contragent.created_by }}
+                            <td class="column7">
+                                <div>
+                                    <a href="{% url 'access_engine:contragent_update' contragent.id %}">Изменить</a>
+                                </div>
+                                <div>
+                                    <a href="{% url 'access_engine:contragent_delete' contragent.id %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
