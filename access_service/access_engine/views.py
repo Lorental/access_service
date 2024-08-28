@@ -1,10 +1,13 @@
 from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView, DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .models import Employee, TechAccount, ItAsset, Role, Company
 from .models import Right, Log, Contragent, Contract_Type
@@ -23,7 +26,7 @@ MAX_OBJECTS_NUMBER = 30
 class FVMixin:
     def form_valid(self, form):
         object = form.save(commit=False)
-        object.created_by = self.request.user.username
+        object.created_by = self.request.user.email
         logsave('create', object.__str__, self.request.user.username)
         object.save()
         return super().form_valid(form)
@@ -59,7 +62,7 @@ class ContractModelMixin:
 
 # ready
 class ContractListView(LoginRequiredMixin, ContractModelMixin, ListView):
-    ordering = 'id'
+    ordering = 'type'
     paginate_by = 30
     template_name = 'access_engine/contract/list.html'
     context_object_name = 'contracts'
@@ -88,6 +91,18 @@ class ContractDetailView(ContractModelMixin, LoginRequiredMixin,
     pass
 
 
+# ready
+@login_required
+def search_contract(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            lookup = Q(type__icontains=query)
+            results = Contract_Type.objects.filter(lookup).distinct()
+            context = {'contracts': results}
+            return render(request, 'access_engine/contract/list.html', context)
+
+
 # Функции Contragent
 
 
@@ -102,7 +117,7 @@ class ContragentModelMixin:
 # ready
 class ContragentListView(ContragentModelMixin, LoginRequiredMixin,
                          ListView):
-    ordering = 'id'
+    ordering = 'name'
     paginate_by = 30
     template_name = 'access_engine/contragent/list.html'
     context_object_name = 'contragents'
@@ -131,6 +146,24 @@ class ContragentDetailView(ContragentModelMixin, LoginRequiredMixin,
     pass
 
 
+# ready
+@login_required
+def search_contragent(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = Contragent.objects.filter(
+                Q(name__icontains=query) |
+                Q(person__icontains=query) |
+                Q(phone_number__icontains=query) |
+                Q(email__icontains=query) |
+                Q(duty_employee__common_name__icontains=query)
+            ).distinct()
+            context = {'contragents': results}
+            return render(request, 'access_engine/contragent/list.html',
+                          context)
+
+
 # Функции Company
 
 
@@ -144,7 +177,7 @@ class CompanyModelMixin:
 
 # ready
 class CompanyListView(CompanyModelMixin, LoginRequiredMixin, ListView):
-    ordering = 'id'
+    ordering = 'name'
     paginate_by = 30
     template_name = 'access_engine/company/list.html'
     context_object_name = 'companies'
@@ -168,6 +201,18 @@ class CompanyDeleteView(CompanyModelMixin, CompanyMixin,
     pass
 
 
+# ready
+@login_required
+def search_company(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            lookup = Q(name__icontains=query)
+            results = Company.objects.filter(lookup).distinct()
+            context = {'companies': results}
+            return render(request, 'access_engine/company/list.html', context)
+
+
 # Функции Employee
 
 
@@ -181,7 +226,7 @@ class EmployeeModelMixin:
 
 # ready
 class EmployeeListView(EmployeeModelMixin, LoginRequiredMixin, ListView):
-    ordering = 'id'
+    ordering = 'common_name'
     paginate_by = 30
     template_name = 'access_engine/employee/list.html'
     context_object_name = 'employees'
@@ -196,7 +241,8 @@ class EmployeeCreateView(EmployeeModelMixin, EmployeeMixin,
         object = form.save(commit=False)
         object.created_by = self.request.user.username
         logsave('create', object.__str__, self.request.user.username)
-        object.common_name = object.surname + " " + object.name + " " + object.patronym
+        object.common_name = (object.surname + " " + object.name + " " +
+                              object.patronym)
         object.save()
         return super().form_valid(form)
 
@@ -210,7 +256,8 @@ class EmployeeUpdateView(EmployeeModelMixin, EmployeeMixin, FVMixin,
         object = form.save(commit=False)
         object.created_by = self.request.user.username
         logsave('create', object.__str__, self.request.user.username)
-        object.common_name = object.surname + " " + object.name + " " + object.patronym
+        object.common_name = (object.surname + " " + object.name + " " +
+                              object.patronym)
         object.save()
         return super().form_valid(form)
 
@@ -226,6 +273,22 @@ class EmployeeDetailView(EmployeeModelMixin, EmployeeMixin,
     pass
 
 
+# ready
+@login_required
+def search_employee(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = Employee.objects.filter(
+                Q(common_name__icontains=query) |
+                Q(contract_type__type__icontains=query) |
+                Q(contragent__name__icontains=query) |
+                Q(company__name__icontains=query)
+            ).distinct()
+            context = {'employees': results}
+            return render(request, 'access_engine/employee/list.html', context)
+
+
 # Функции ItAsset
 
 
@@ -239,7 +302,7 @@ class ItAssetModelMixin:
 
 # ready
 class ItAssetListView(ItAssetModelMixin, LoginRequiredMixin, ListView):
-    ordering = 'id'
+    ordering = 'name'
     paginate_by = 30
     template_name = 'access_engine/itasset/list.html'
     context_object_name = 'itassets'
@@ -268,6 +331,22 @@ class ItAssetDetailView(ItAssetModelMixin, LoginRequiredMixin,
     pass
 
 
+# ready
+@login_required
+def search_itasset(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = ItAsset.objects.filter(
+                Q(name__icontains=query) |
+                Q(url_address__icontains=query) |
+                Q(ip_address__icontains=query) |
+                Q(owner__common_name__icontains=query)
+            ).distinct()
+            context = {'itassets': results}
+            return render(request, 'access_engine/itasset/list.html', context)
+
+
 # Функции Log
 
 
@@ -293,16 +372,24 @@ class RoleModelMixin:
 
 # ready
 class RoleListView(RoleModelMixin, LoginRequiredMixin, ListView):
-    ordering = 'id'
+    ordering = 'name'
     paginate_by = 30
     template_name = 'access_engine/role/list.html'
     context_object_name = 'roles'
 
 
 # ready
-class RoleCreateView(RoleModelMixin, RoleMixin, FVMixin,
+class RoleCreateView(RoleModelMixin, RoleMixin,
                      CUDMixin, LoginRequiredMixin, CreateView):
     form_class = RoleForm
+
+    def form_valid(self, form):
+        object = form.save(commit=False)
+        object.created_by = self.request.user.username
+        object.name = object.itasset.name + " - " + object.name
+        logsave('create', object.__str__, self.request.user.username)
+        object.save()
+        return super().form_valid(form)
 
 
 # ready
@@ -319,6 +406,20 @@ class RoleDeleteView(RoleModelMixin, RoleMixin,
 
 class RoleDetailView(RoleModelMixin, LoginRequiredMixin, DetailView):
     pass
+
+
+# ready
+@login_required
+def search_role(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = Role.objects.filter(
+                Q(name__icontains=query) |
+                Q(itasset__name__icontains=query)
+            ).distinct()
+            context = {'roles': results}
+            return render(request, 'access_engine/role/list.html', context)
 
 
 # Функции Right
@@ -363,6 +464,22 @@ class RightDetailView(RightModelMixin, LoginRequiredMixin,
     pass
 
 
+# ready
+@login_required
+def search_right(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = Right.objects.filter(
+                Q(role__name__icontains=query) |
+                Q(employee__common_name__icontains=query) |
+                Q(techaccount__name__icontains=query) |
+                Q(role__itasset__name__icontains=query)
+            ).distinct()
+            context = {'rights': results}
+            return render(request, 'access_engine/right/list.html', context)
+
+
 # Функции TechAccount
 
 
@@ -377,7 +494,7 @@ class TechAccountModelMixin:
 # ready
 class TechAccountListView(TechAccountModelMixin, LoginRequiredMixin,
                           ListView):
-    ordering = 'id'
+    ordering = 'name'
     paginate_by = 30
     template_name = 'access_engine/techaccount/list.html'
     context_object_name = 'techaccounts'
@@ -406,6 +523,22 @@ class TechAccountDeleteView(TechAccountModelMixin, TechAccountMixin,
 class TechAccountDetailView(TechAccountModelMixin, LoginRequiredMixin,
                             DetailView):
     pass
+
+
+# ready
+@login_required
+def search_techaccount(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query is not None:
+            results = TechAccount.objects.filter(
+                Q(name__icontains=query) |
+                Q(owner__common_name__icontains=query) |
+                Q(itasset__name__icontains=query)
+            ).distinct()
+            context = {'techaccounts': results}
+            return render(request, 'access_engine/techaccount/list.html',
+                          context)
 
 
 # def view_employees_list(request):

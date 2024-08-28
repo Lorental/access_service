@@ -37,6 +37,11 @@ urlpatterns = [
         views.ContractDetailView.as_view(),
         name='contract_detail'
         ),
+    path(
+        'contract/search/',
+        views.search_contract,
+        name='search_contract'
+    ),
     # contragents urls
     path(
         'contragent/list/',
@@ -63,6 +68,11 @@ urlpatterns = [
         views.ContragentDetailView.as_view(),
         name='contragent_detail'
         ),
+    path(
+        'contragent/search/',
+        views.search_contragent,
+        name='search_contragent'
+        ),
     # company urls
     path(
         'company/list/',
@@ -83,6 +93,11 @@ urlpatterns = [
         'company/delete/<int:pk>',
         views.CompanyDeleteView.as_view(),
         name='company_delete'
+        ),
+    path(
+        'company/search/',
+        views.search_company,
+        name='search_company'
         ),
     # log urls
     path(
@@ -116,6 +131,11 @@ urlpatterns = [
         views.EmployeeDetailView.as_view(),
         name='employee_detail'
         ),
+    path(
+        'employee/search/',
+        views.search_employee,
+        name='search_employee'
+        ),
     # it asset urls
     path(
         'itasset/list/',
@@ -141,6 +161,11 @@ urlpatterns = [
         'itasset/<int:pk>/',
         views.ItAssetDetailView.as_view(),
         name='itasset_detail'
+        ),
+    path(
+        'itasset/search/',
+        views.search_itasset,
+        name='search_itasset'
         ),
     # role urls
     path(
@@ -168,6 +193,11 @@ urlpatterns = [
         views.RoleDetailView.as_view(),
         name='role_detail'
         ),
+    path(
+        'role/search/',
+        views.search_role,
+        name='search_role'
+        ),
     # right urls
     path(
         'right/list/',
@@ -194,6 +224,11 @@ urlpatterns = [
         views.RightDetailView.as_view(),
         name='right_detail'
         ),
+    path(
+        'right/search/',
+        views.search_right,
+        name='search_right'
+        ),
     # tech account urls
     path(
         'techaccount/list/',
@@ -219,5 +254,10 @@ urlpatterns = [
         'techaccount/<int:pk>/',
         views.TechAccountDetailView.as_view(),
         name='techaccount_detail'
+        ),
+    path(
+        'techaccout/search/',
+        views.search_techaccount,
+        name='search_techaccount'
         )
 ]

@@ -94,7 +94,7 @@ class Employee(AbstractClass):
         Company,
         on_delete=models.SET_NULL,
         verbose_name='Юр.лицо',
-        related_name='companies',
+        related_name='employees',
         null=True,
         blank=True
     )
@@ -117,7 +117,7 @@ class ItAsset(AbstractClass):
         Employee,
         on_delete=models.SET_NULL,
         verbose_name='Владелец',
-        related_name='it_assets',
+        related_name='itassets',
         null=True
     )
     comment = models.TextField('Комментарий', blank=True)
@@ -183,7 +183,7 @@ class Right(AbstractClass):
         'TechAccount',
         on_delete=models.CASCADE,
         verbose_name='Тех.учетка',
-        related_name='techaccounts',
+        related_name='rights',
         null=True,
         blank=True
     )
@@ -206,13 +206,8 @@ class TechAccount(AbstractClass):
         ItAsset,
         on_delete=models.SET_NULL,
         verbose_name='Сервис',
-        related_name='tech_accounts',
+        related_name='techaccounts',
         null=True
-    )
-    role = models.ManyToManyField(
-        'Role',
-        verbose_name='Роль / Полномочия',
-        related_name='tech_accounts',
     )
 
     class Meta:

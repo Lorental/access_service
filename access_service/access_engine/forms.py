@@ -9,6 +9,8 @@ User = get_user_model()
 
 
 class ContractTypeForm(forms.ModelForm):
+    type = forms.ModelChoiceField(queryset=Contract_Type.objects.order_by(
+        'type'))
 
     class Meta:
         model = Contract_Type
@@ -18,6 +20,7 @@ class ContractTypeForm(forms.ModelForm):
 
 
 class ContragentForm(forms.ModelForm):
+    name = forms.ModelChoiceField(queryset=Contragent.objects.order_by('name'))
 
     class Meta:
         model = Contragent
@@ -31,6 +34,7 @@ class ContragentForm(forms.ModelForm):
 
 
 class CompanyForm(forms.ModelForm):
+    name = forms.ModelChoiceField(queryset=Company.objects.order_by('name'))
 
     class Meta:
         model = Company
@@ -43,6 +47,12 @@ class CompanyForm(forms.ModelForm):
 
 
 class EmployeeForm(forms.ModelForm):
+    contract_type = forms.ModelChoiceField(
+        queryset=Contract_Type.objects.order_by('type'))
+    contragent = forms.ModelChoiceField(queryset=Contragent.objects.order_by(
+        'name'))
+    company = forms.ModelChoiceField(queryset=Company.objects.order_by(
+        'name'))
 
     class Meta:
         model = Employee
@@ -60,6 +70,8 @@ class EmployeeForm(forms.ModelForm):
 
 
 class ItAssetForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(queryset=Employee.objects.filter(
+        is_contragent=False).order_by('common_name'))
 
     class Meta:
         model = ItAsset
@@ -83,6 +95,7 @@ class LogForm(forms.ModelForm):
 
 
 class RoleForm(forms.ModelForm):
+    itasset = forms.ModelChoiceField(queryset=ItAsset.objects.order_by('name'))
 
     class Meta:
         model = Role
@@ -93,6 +106,12 @@ class RoleForm(forms.ModelForm):
 
 
 class RightForm(forms.ModelForm):
+    role = forms.ModelChoiceField(queryset=Role.objects.order_by(
+        'name'))
+    employee = forms.ModelChoiceField(queryset=Employee.objects.order_by(
+        'common_name'))
+    techaccount = forms.ModelChoiceField(queryset=TechAccount.objects.order_by(
+        'name'))
 
     class Meta:
         model = Right
@@ -108,6 +127,10 @@ class RightForm(forms.ModelForm):
 
 
 class TechAccountForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(Employee.objects.order_by(
+        'common_name'))
+    itasset = forms.ModelChoiceField(ItAsset.objects.order_by(
+        'name'))
 
     class Meta:
         model = TechAccount
@@ -116,5 +139,4 @@ class TechAccountForm(forms.ModelForm):
             'is_active',
             'owner',
             'itasset',
-            'role',
         )

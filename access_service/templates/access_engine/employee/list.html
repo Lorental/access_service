@@ -8,6 +8,12 @@
 </div>
 <div>
     <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:employee_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+    <hr>
+    <form class="form-inline" action="{% url 'access_engine:search_employee' %}" method="GET">
+        <input class="form-control mr-sm-2" type="search" name="q" placeholder="Поиск по всем текстовым полям" aria-label="Search">
+        <br>
+        <button class="btn btn-primary btn-sm btn-round" type="submit">Поиск</button>
+    </form>
 </div>
 <hr>
 <div class="limiter">
@@ -22,9 +28,10 @@
                             <th class="column3">Активно</th>
                             <th class="column4">Является контрагентом</th>
                             <th class="column5">Юр.лицо</th>
-                            <th class="column6">Дата окончания сотрудничества</th>
-                            <th class="column7">Автор</th>
-                            <th class="column8">Действия</th>
+                            <th class="column6">Контрагент</th>
+                            <th class="column7">Дата окончания сотрудничества</th>
+                            <th class="column8">Автор</th>
+                            <th class="column9">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,9 +44,10 @@
                             <td class="column3">{{ employee.is_active }}</td>
                             <td class="column4">{{ employee.is_contragent }}</td>
                             <td class="column5">{{ employee.company.name }}</td>
-                            <td class="column6">{{ employee.end_time }}</td>
-                            <td class="column7">{{ contragent.created_by }}</td>
-                            <td class="column8">
+                            <td class="column6">{{ employee.contragent.name}}</td>
+                            <td class="column7">{{ employee.end_time }}</td>
+                            <td class="column8">{{ contragent.created_by }}</td>
+                            <td class="column9">
                                 <div>
                                     <a href="{% url 'access_engine:employee_update' employee.id %}">Изменить</a>
                                 </div>
