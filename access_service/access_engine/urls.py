@@ -259,5 +259,10 @@ urlpatterns = [
         'techaccout/search/',
         views.search_techaccount,
         name='search_techaccount'
+        ),
+    path(
+        'ajax/load-roles',
+        views.ajax_load_roles,
+        name='ajax_load_roles'
         )
 ]

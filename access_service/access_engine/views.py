@@ -83,7 +83,12 @@ class ContractUpdateView(ContractModelMixin, ContractMixin, FVMixin,
 # ready
 class ContractDeleteView(ContractModelMixin, ContractMixin,
                          CUDMixin, LoginRequiredMixin, DeleteView):
-    pass
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractDeleteView, self).get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(
+            contract_type=self.kwargs['pk'])
+        return context
 
 
 class ContractDetailView(ContractModelMixin, LoginRequiredMixin,
@@ -138,7 +143,11 @@ class ContragentUpdateView(ContragentModelMixin, ContragentMixin, FVMixin,
 # ready
 class ContragentDeleteView(ContragentModelMixin, ContragentMixin,
                            CUDMixin, LoginRequiredMixin, DeleteView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(ContragentDeleteView, self).get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(
+            contragent=self.kwargs['pk'])
+        return context
 
 
 class ContragentDetailView(ContragentModelMixin, LoginRequiredMixin,
@@ -198,7 +207,11 @@ class CompanyUpdateView(CompanyModelMixin, CompanyMixin, FVMixin,
 # ready (without checker)
 class CompanyDeleteView(CompanyModelMixin, CompanyMixin,
                         CUDMixin, LoginRequiredMixin, DeleteView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(CompanyDeleteView, self).get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(
+            company=self.kwargs['pk'])
+        return context
 
 
 # ready
@@ -265,7 +278,18 @@ class EmployeeUpdateView(EmployeeModelMixin, EmployeeMixin, FVMixin,
 # ready
 class EmployeeDeleteView(EmployeeModelMixin, EmployeeMixin,
                          CUDMixin, LoginRequiredMixin, DeleteView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeDeleteView, self).get_context_data(**kwargs)
+        context['duties'] = Contragent.objects.filter(
+            duty_employee=self.kwargs['pk']
+        )
+        context['itassets'] = ItAsset.objects.filter(
+            owner=self.kwargs['pk']
+        )
+        context['techaccounts'] = TechAccount.objects.filter(
+            owner=self.kwargs['pk']
+        )
+        return context
 
 
 class EmployeeDetailView(EmployeeModelMixin, EmployeeMixin,
@@ -539,6 +563,14 @@ def search_techaccount(request):
             context = {'techaccounts': results}
             return render(request, 'access_engine/techaccount/list.html',
                           context)
+
+
+def ajax_load_roles(request):
+    itasset_id = request.GET.get('itasset')
+    roles = Role.objects.filter(itasset_id=itasset_id).order_by('name')
+    print(roles)
+    context = {'roles': roles}
+    return render(request, 'access_engine/common/ajax_roles.html', context)
 
 
 # def view_employees_list(request):

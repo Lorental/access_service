@@ -164,6 +164,13 @@ class Role(AbstractClass):
 
 class Right(AbstractClass):
     is_tech = models.BooleanField()
+    itasset = models.ForeignKey(
+        ItAsset,
+        on_delete=models.CASCADE,
+        verbose_name='ИТ Актив',
+        related_name='rights',
+        null=True
+    )
     role = models.ForeignKey(
         Role,
         on_delete=models.CASCADE,

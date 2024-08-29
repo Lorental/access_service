@@ -34,23 +34,65 @@
                                 Есть связи удаляемого элемента со следующими элементами, вы точно уверены что хотите удалить?
                             </div>
                             <hr>
+                            {% if '/contract' or '/company' or '/contragent' in request.path %}
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr class="table100-head">
-                                        {% if '/company' in request.path %}
-                                            <th class='column1'>Сотрудники</th>
-                                        {% endif %}
+                                        <th class='column1'>Сотрудники</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        
-                                    </tr>
+                                        {% for employee in employees %}
+                                            <tr>
+                                                <td class='column1'>{{ employee.common_name }}</td>
+                                            </tr>
+                                        {% endfor %}
                                 </tbody>
                             </table>
+                            {% endif %}
+                            {% if '/employee' in request.path %}
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr class="table100-head">
+                                        <th class='column1'>Ответственнен за контрагентов</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {% for duty in duties %}
+                                            <tr>
+                                                <td class='column1'>{{ duty.name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                </tbody>
+                                <thead>
+                                    <tr class="table100-head">
+                                        <th class='column1'>Владелец ИТ Активов</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {% for itasset in itassets %}
+                                            <tr>
+                                                <td class='column1'>{{ itasset.name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                </tbody>
+                                <thead>
+                                    <tr class="table100-head">
+                                        <th class='column1'>Владелец Технических аккаунтов</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {% for techaccount in techaccounts %}
+                                            <tr>
+                                                <td class='column1'>{{ techaccount.name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
                         </article>
                     {% endif %}
-                    {% if not 'delete' in request.path %}
+                    {% if not '/delete' in request.path %}
                         {% bootstrap_button button_type='submit' content='Сохранить' %}
                     {% else %}
                         {% bootstrap_button button_type='submit' content='Удалить' %}
