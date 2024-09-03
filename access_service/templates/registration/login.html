@@ -33,7 +33,7 @@
         {% bootstrap_form form %}
         <!-- В скрытом поле передаём параметр next, 
           это URL для переадресации после логина. -->
-        <input type="hidden" name="next" value="{{ url 'access_engine:homepage' }}">
+        <input type="hidden" name="next" value="{{ next }}">
         {% bootstrap_button button_type="submit" content="Войти" %}
       </form>
     </div>

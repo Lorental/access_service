@@ -5,11 +5,11 @@ volumes:
   static:
 
 services:
-  db:
+  postgres:
     image: postgres:13.10
     env_file: .env
     volumes:
-      - pg_data:/var/lib/postgresql/pg_data
+      - /var/pg_data:/var/lib/postgresql/data
     networks:
       - ac-net
   backend:
@@ -18,7 +18,7 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - db
+      - postgres
     networks:
       - ac-net
 networks:
