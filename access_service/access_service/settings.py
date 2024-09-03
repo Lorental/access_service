@@ -90,8 +90,8 @@ DATABASES = {
         'NAME': os.getenv('AC_DB', 'django'),
         'USER': os.getenv('AC_USER', 'django'),
         'PASSWORD': os.getenv('AC_USER_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', 5432)
+        'HOST': os.getenv('AC_DB_HOST', 'localhost'),
+        'PORT': os.getenv('AC_DB_PORT', 5432)
     }
 }
 
