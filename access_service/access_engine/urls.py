@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 from .import views
 
@@ -7,6 +8,11 @@ app_name = 'access_engine'
 urlpatterns = [
     # main page
     path('', views.HomePage.as_view(), name='homepage'),
+    path(
+        'auth/password_change/',
+        auth_views.PasswordChangeView.as_view(success_url='done'),
+        name='password_change'
+        ),
     # authorization pages
     path('auth/', include('django.contrib.auth.urls')),
     # contract types urls

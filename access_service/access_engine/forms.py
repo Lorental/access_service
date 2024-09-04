@@ -51,9 +51,9 @@ class EmployeeForm(forms.ModelForm):
         queryset=Contract_Type.objects.order_by('type'),
         label='Тип трудоустройства')
     contragent = forms.ModelChoiceField(queryset=Contragent.objects.order_by(
-        'name'), label='Название контрагента')
+        'name'), label='Название контрагента', required=False)
     company = forms.ModelChoiceField(queryset=Company.objects.order_by(
-        'name'), label='Юр.Лицо')
+        'name'), label='Юр.Лицо', required=False)
 
     class Meta:
         model = Employee
@@ -114,9 +114,10 @@ class RightForm(forms.ModelForm):
     role = forms.ModelChoiceField(queryset=Role.objects.order_by('name'),
                                   label='Роль в ИТ Активе')
     employee = forms.ModelChoiceField(queryset=Employee.objects.order_by(
-        'common_name'), label='Сотрудник')
+        'common_name'), label='Сотрудник', required=False)
     techaccount = forms.ModelChoiceField(queryset=TechAccount.objects.order_by(
-        'name'), label='Технический аккаунт (если привязывается к нему)')
+        'name'), label='Технический аккаунт (если привязывается к нему)',
+        required=False)
 
     class Meta:
         model = Right
