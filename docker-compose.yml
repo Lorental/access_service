@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   pg_data:
   static:
@@ -15,10 +13,22 @@ services:
   backend:
     build: ./access_service/
     env_file: .env
-    ports:
-      - 8080:8080
+    volumes:
+      - static:/backend_static
     depends_on:
       - postgres
+    networks:
+      - ac-net
+  gateway:
+    build: ./gateway/
+    env_file: .env
+    volumes:
+      - static:/staticfiles/
+    ports:
+      - 127.0.0.1:9000:80
+    depends_on:
+      - postgres
+      - backend
     networks:
       - ac-net
 networks:
