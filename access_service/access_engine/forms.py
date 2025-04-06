@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from .models import Contract_Type, Contragent, Company, Employee
-from .models import ItAsset, Role, Right, TechAccount, Log
+from .models import ItAsset, Role, Right, TechAccount, Log, BillingMethod
 
 
 User = get_user_model()
@@ -43,6 +43,27 @@ class CompanyForm(forms.ModelForm):
         )
 
 
+class BillingMethodForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(queryset=Employee.objects.filter(
+        is_contragent=False).order_by('common_name'),
+        label='Ответственный владелец')
+    company = forms.ModelChoiceField(queryset=Company.objects.order_by('name'))
+    expiration_date = forms.DateField(
+        label='Дата экспирации платежного метода',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+    )
+
+    class Meta:
+        model = BillingMethod
+        fields = (
+            'name',
+            'owner',
+            'company',
+            'expiration_date',
+            'comment',
+        )
+
+
 # Asset class forms
 
 
@@ -74,6 +95,8 @@ class ItAssetForm(forms.ModelForm):
     owner = forms.ModelChoiceField(queryset=Employee.objects.filter(
         is_contragent=False).order_by('common_name'),
         label='Ответственный владелец')
+    company = forms.ModelChoiceField(queryset=Company.objects.order_by('name'),
+                                     label='Юр.лицо', required=False)
 
     class Meta:
         model = ItAsset
@@ -83,6 +106,7 @@ class ItAssetForm(forms.ModelForm):
             'ip_address',
             'owner',
             'comment',
+            'company',
         )
 
 

@@ -27,9 +27,10 @@
                             <th class="column2">URL админки</th>
                             <th class="column3">IP адрес админки</th>
                             <th class="column4">Ответственный</th>
-                            <th class="column5">Комментарий</th>
-                            <th class="column6">Автор</th>
-                            <th class="column7">Действия</th>
+                            <th class="column5">Юр.лицо</th>
+                            <th class="column6">Комментарий</th>
+                            <th class="column7">Автор</th>
+                            <th class="column8">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,9 +42,10 @@
                             <td class="column2">{{ itasset.url_address }}</td>
                             <td class="column3">{{ itasset.ip_address }}</td>
                             <td class="column4">{{ itasset.owner.common_name }}</td>
-                            <td class="column5">{{ itasset.comment }}</td>
-                            <td class="column6">{{ itasset.created_by }}</td>
-                            <td class="column7">
+                            <td class="column5">{{ itasset.company.name }}</td>
+                            <td class="column6">{{ itasset.comment }}</td>
+                            <td class="column7">{{ itasset.created_by }}</td>
+                            <td class="column8">
                                 <div>
                                     <a href="{% url 'access_engine:itasset_update' itasset.id %}">Изменить</a>
                                 </div>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br>
+<hr>
+<div>
+    Платежные методы - Панель управления
+</div>
+<div>
+    <a type="button" class="btn btn-primary btn-sm btn-round" href="{% url 'access_engine:billingmethods_create' %}" name="Создать новую сущность">Создать новую сущность</a>
+    <hr>
+</div>
+<hr>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="table100-head">
+                            <th class="column1>">Название</th>
+                            <th class="column2>">Ответственный</th>
+                            <th class="column3>">Юр.лицо</th>
+                            <th class="column4>">Дата истечения</th>
+                            <th class="column5>">Комментарий</th>
+                            <th class="column6>">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for billingmethod in billingmethods %}
+                        <tr>
+                            <td class="column1">{{ billingmethod.name }}</td>
+                            <td class="column2">{{ billingmethod.owner.name }}</td>
+                            <td class="column3">{{ billingmethod.company.name }}</td>
+                            <td class="column4">{{ billingmethod.expiration_date }}</td>
+                            <td class="column5">{{ billingmethod.comment }}</td>
+                            <td class="column6">
+                                <div>
+                                    <a href="{% url 'access_engine:billingmethods_update' billingmethod.id %}">Изменить</a>
+                                </div>
+                                <div>
+                                    <a href="{% url 'access_engine:billingmethods_delete' billingmethod.id %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

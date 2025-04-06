@@ -65,6 +65,30 @@ class Company(AbstractClass):
         return self.name
 
 
+class BillingMethod(AbstractClass):
+    name = models.CharField('Название платежного метода', max_length=200)
+    owner = models.ForeignKey(
+        'Employee',
+        on_delete=models.SET_NULL,
+        verbose_name='Ответственный сотрудник',
+        related_name='employees',
+        null=True,
+        blank=False
+    )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
+        verbose_name='Юр.лицо',
+        related_name='BillingMethods',
+        null=True
+    )
+    expiration_date = models.DateField(null=True)
+    comment = models.TextField('Комментарий')
+
+    def __str__(self) -> str:
+        return self.name
+
+
 # Asset classes
 
 
@@ -121,6 +145,13 @@ class ItAsset(AbstractClass):
         null=True
     )
     comment = models.TextField('Комментарий', blank=True)
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
+        verbose_name='Юр.лицо',
+        related_name='companies',
+        null=True
+    )
 
     class Meta:
         verbose_name = 'ИТ-актив'

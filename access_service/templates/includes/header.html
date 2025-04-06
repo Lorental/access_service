@@ -47,6 +47,12 @@
                   Юр.Лица
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link {% if view_name == 'access_engine:billingmethods_list' %} active {% endif %}" 
+                  href="{% url 'access_engine:billingmethods_list' %}">
+                  Платежные методы
+                </a>
+              </li>
               <span class="navbar-text">Пользователь: <b>{{ user.username }}</b></span>
               <!-- Новая кнопка -->
               <li class="nav-item">

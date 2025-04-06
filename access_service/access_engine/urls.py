@@ -266,6 +266,32 @@ urlpatterns = [
         views.search_techaccount,
         name='search_techaccount'
         ),
+    # billing method urls
+    path(
+        'billingmethods/list/',
+        views.BillingMethodsListView.as_view(),
+        name='billingmethods_list'
+        ),
+    path(
+        'billingmethods/create/',
+        views.BillingMethodsCreateView.as_view(),
+        name='billingmethods_create'
+        ),
+    path(
+        'billingmethods/update/<int:pk>',
+        views.BillingMethodsUpdateView.as_view(),
+        name='billingmethods_update'
+        ),
+    path(
+        'billingmethods/delete/<int:pk>',
+        views.BillingMethodsDeleteView.as_view(),
+        name='billingmethods_delete'
+        ),
+    path(
+        'billingmethods/<int:pk>/',
+        views.BillingMethodsDetailView.as_view(),
+        name='billingmethods_detail'
+        ),
     path(
         'ajax/load-roles',
         views.ajax_load_roles,

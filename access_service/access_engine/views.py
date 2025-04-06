@@ -10,11 +10,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from .models import Employee, TechAccount, ItAsset, Role, Company
-from .models import Right, Log, Contragent, Contract_Type
+from .models import Right, Log, Contragent, Contract_Type, BillingMethod
 
 from .forms import EmployeeForm, TechAccountForm, ItAssetForm, CompanyForm
 from .forms import RoleForm, RightForm, ContractTypeForm
-from .forms import ContragentForm
+from .forms import ContragentForm, BillingMethodForm
 
 from .utils import logsave
 
@@ -578,3 +578,53 @@ def ajax_load_roles(request):
 #    employees = Employee.objects.order_by('surname')[:MAX_OBJECTS_NUMBER]
 #    context = {'employees_list': employees}
 #    return render(request, page, context)
+
+# функции Contract_type
+
+
+class BillingMethodMixin:
+    success_url = reverse_lazy('access_engine:billingmethods_list')
+
+
+class BillingMethodModelMixin:
+    model = BillingMethod
+
+
+# ready
+class BillingMethodsListView(LoginRequiredMixin, BillingMethodModelMixin,
+                             ListView):
+    ordering = 'name'
+    paginate_by = 30
+    template_name = 'access_engine/billingmethod/list.html'
+    context_object_name = 'billingmethods'
+
+
+# ready
+class BillingMethodsCreateView(BillingMethodModelMixin, BillingMethodMixin,
+                               FVMixin, CUDMixin, LoginRequiredMixin,
+                               CreateView):
+    form_class = BillingMethodForm
+
+
+# ready
+class BillingMethodsUpdateView(BillingMethodModelMixin, BillingMethodMixin,
+                               FVMixin, CUDMixin, LoginRequiredMixin,
+                               UpdateView):
+    form_class = BillingMethodForm
+
+
+# ready
+class BillingMethodsDeleteView(BillingMethodModelMixin, BillingMethodMixin,
+                               CUDMixin, LoginRequiredMixin, DeleteView):
+
+    def get_context_data(self, **kwargs):
+        context = super(BillingMethodsDeleteView,
+                        self).get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(
+            contract_type=self.kwargs['pk'])
+        return context
+
+
+class BillingMethodsDetailView(BillingMethodModelMixin, LoginRequiredMixin,
+                               DetailView):
+    pass
